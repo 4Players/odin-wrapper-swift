@@ -108,9 +108,9 @@ room.delegate = delegate
 //:     This is a dictionary containing all peers in the room, indexed by their ID. Each peer has its own `userData`
 //:     property, which is also observable and stores a byte array with arbitrary data assigned by the user.
 //: * `OdinRoom.medias` \
-//:     This is a dictionary containing all locel and remote media streams in the room, indexed by their ID. Each media
-//:     has an observable property called `activityStatus`, which indicates wether or not the media stream is sending
-//:     or receiving data.
+//:     This is a dictionary containing all locel and remote media streams in the room, indexed by their stream handle.
+//:     Each media has an observable property called `activityStatus`, which indicates wether or not the media stream is
+//:     sending or receiving data.
 
 // Monitor the room connection status
 room.$connectionStatus.sink {
@@ -258,7 +258,7 @@ try room.sendMessage(data: yourMessage)
 //: ### Acoustic Echo Cancellation (AEC)
 //:
 //: When enabled the echo canceller will try to subtract echoes, reverberation, and unwanted added sounds from the audio input
-//: signal. Note, that you need to processes the reverse audio stream, also known as the loopback data to be used in the ODIN
+//: signal. Note, that you need to process the reverse audio stream, also known as the loopback data to be used in the ODIN
 //: echo canceller.
 //:
 //: ### Noise Suppression
