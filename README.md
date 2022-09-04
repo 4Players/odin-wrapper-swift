@@ -203,7 +203,7 @@ room.delegate = delegate
 
 #### b) Using Published Properties
 
-Every OdinRoom instance provides a set of observable properties using the @Published property wrapper. This allows you to easily monitor these variables as signals are emitted whenever their values were changed.
+Every `OdinRoom` instance provides a set of observable properties using the `@Published` property wrapper. This allows you to easily monitor these variables as signals are emitted whenever their values were changed.
 
 There are three distinct properties you can observe:
 
@@ -212,7 +212,7 @@ This is a tuple representing current connection status of the room including a r
 - `OdinRoom.peers` \
 This is a dictionary containing all peers in the room, indexed by their ID. Each peer has its own `userData` property, which is also observable and stores a byte array with arbitrary data assigned by the user.
 - `OdinRoom.medias` \
-This is a dictionary containing all locel and remote media streams in the room, indexed by their stream handle. Each media has an observable property called `activityStatus`, which indicates wether or not the media stream is sending or receiving data.
+This is a dictionary containing all local and remote media streams in the room, indexed by their stream handle. Each media has an observable property called `activityStatus`, which indicates wether or not the media stream is sending or receiving data.
 
 ```swift
 // Monitor the room connection status

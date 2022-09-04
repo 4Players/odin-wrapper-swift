@@ -108,7 +108,7 @@ room.delegate = delegate
 //:     This is a dictionary containing all peers in the room, indexed by their ID. Each peer has its own `userData`
 //:     property, which is also observable and stores a byte array with arbitrary data assigned by the user.
 //: * `OdinRoom.medias` \
-//:     This is a dictionary containing all locel and remote media streams in the room, indexed by their stream handle.
+//:     This is a dictionary containing all local and remote media streams in the room, indexed by their stream handle.
 //:     Each media has an observable property called `activityStatus`, which indicates wether or not the media stream is
 //:     sending or receiving data.
 
