@@ -10,13 +10,27 @@
 
 OdinKit is a Swift package providing an object-oriented wrapper for the [ODIN](https://github.com/4Players/odin-sdk) native client library, which enables developers to integrate real-time VoIP chat technology into multiplayer games and apps on macOS and iOS.
 
+- [Requirements](#requirements)
+  - [XCFramework](#xcframework)
+- [Usage](#usage)
+  - [Quick Start](#quick-start)
+  - [Playground](#playground)
+  - [Class Overview](#class-overview)
+  - [Event Handling](#event-handling)
+  - [Audio Processing](#audio-processing)
+  - [User Data](#user-data)
+  - [Messages](#messages)
+- [Resources](#resources)
+- [License](#license)
+- [Troubleshooting](#troubleshooting)
+
 ## Requirements
 
 - iOS 9.0+ / macOS 10.15+
 - Xcode 10.2+
 - Swift 5.0+
 
-### ODIN XCFramework
+### XCFramework
 
 To use OdinKit, you'll need the `Odin.xcframework` bundle in the `Frameworks` directory. We'll provide builds with matching XCFrameworks for each version on the [GitHub Releases](https://github.com/4Players/odin-wrapper-swift/releases) page.
 
@@ -28,6 +42,12 @@ An XCFramework is a distributable binary package created by Xcode, which contain
 | iOS      | :white_check_mark: | :white_check_mark: |
 
 To manually add the correct XCFramework version, please refer to `Sources/OdinKit.swift` for the required version number and download the `odin-xcframework.tgz` file from the appropriate release of the [ODIN Core SDK](https://github.com/4Players/odin-sdk/releases).
+
+We're also providing a simple Python script called [Setup.py](https://github.com/4Players/odin-wrapper-swift/blob/master/Setup.py), which will download the required XCFramework version and extract it to the correct location.
+
+```bash
+python3 ./Setup.py
+```
 
 ## Usage
 
@@ -205,10 +225,12 @@ room.delegate = delegate
 
 Every `OdinRoom` instance provides a set of observable properties using the `@Published` property wrapper. This allows you to easily monitor these variables as signals are emitted whenever their values were changed.
 
-There are three distinct properties you can observe:
+There are four distinct properties you can observe:
 
 - `OdinRoom.connectionStatus` \
 This is a tuple representing current connection status of the room including a reason identifier for the last update.
+- `OdinRoom.userData` \
+This is a byte array (`[UInt8]`), which can be used to attach arbitrary data to the room. This data is synced automatically.
 - `OdinRoom.peers` \
 This is a dictionary containing all peers in the room, indexed by their ID. Each peer has its own `userData` property, which is also observable and stores a byte array with arbitrary data assigned by the user.
 - `OdinRoom.medias` \
@@ -218,6 +240,11 @@ This is a dictionary containing all local and remote media streams in the room, 
 // Monitor the room connection status
 room.$connectionStatus.sink {
     print("New Connection Status: \($0.state.rawValue)")
+}
+
+// Monitor the room user data
+room.$userData.sink {
+    print("New User Data: \($0)")
 }
 
 // Monitor the list of peers in the room
@@ -234,6 +261,26 @@ room.$medias.sink {
 ### Audio Processing
 
 Each ODIN room handle has its own audio processing module (APM), which is in charge of filters like echo cancellation, noise suppression, advanced voice activity detection and more. These settings can be changed on-the-fly by passing an OdinApmConfig to the rooms updateAudioConfig.
+
+```swift
+// Create a new APM settings struct
+let audioConfig: OdinApmConfig = .init(
+    voice_activity_detection: true,
+    voice_activity_detection_attack_probability: 0.9,
+    voice_activity_detection_release_probability: 0.8,
+    volume_gate: true,
+    volume_gate_attack_loudness: -30,
+    volume_gate_release_loudness: -40,
+    echo_canceller: true,
+    high_pass_filter: true,
+    pre_amplifier: true,
+    noise_suppression_level: OdinNoiseSuppressionLevel_Moderate,
+    transient_suppressor: true
+)
+
+// Update the APM settings of the room
+try room.updateAudioConfig(audioConfig)
+```
 
 The ODIN APM provides the following features:
 
@@ -264,26 +311,6 @@ When enabled, the preamplifier will boost the signal of sensitive microphones by
 #### Transient Suppression
 
 When enabled, the transient suppressor will try to detect and attenuate keyboard clicks.
-
-```swift
-// Create a new APM settings struct
-let audioConfig: OdinApmConfig = .init(
-    voice_activity_detection: true,
-    voice_activity_detection_attack_probability: 0.9,
-    voice_activity_detection_release_probability: 0.8,
-    volume_gate: true,
-    volume_gate_attack_loudness: -30,
-    volume_gate_release_loudness: -40,
-    echo_canceller: true,
-    high_pass_filter: true,
-    pre_amplifier: true,
-    noise_suppression_level: OdinNoiseSuppressionLevel_Moderate,
-    transient_suppressor: true
-)
-
-// Update the APM settings of the room
-try room.updateAudioConfig(audioConfig)
-```
 
 ### User Data
 
@@ -324,7 +351,7 @@ let codableData = OdinCustomData.encode(yourCodable)
 try room.updateUserData(userData: codableData, target: OdinUserDataTarget_Peer)
 ```
 
-#### Messages
+### Messages
 
 ODIN allows you to send arbitrary to every other peer in the room or even individual targets. Just like user data, a message is a byte array (`[UInt8]`), which means that you can use the same convenience functions in `OdinCustomData` to make your life easier.
 

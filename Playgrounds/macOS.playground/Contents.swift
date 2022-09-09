@@ -99,11 +99,14 @@ room.delegate = delegate
 //: Every `OdinRoom` instance provides a set of observable properties using the `@Published` property wrapper. This
 //: allows you to easily monitor these variables as signals are emitted whenever their values were changed.
 //:
-//: There are three distinct properties you can observe:
+//: There are four distinct properties you can observe:
 //:
 //: * `OdinRoom.connectionStatus` \
 //:     This is a tuple representing current connection status of the room including a reason identifier for the last
 //:     update.
+//: * `OdinRoom.userData` \
+//:     This is a byte array (`[UInt8]`), which can be used to attach arbitrary data to the room. This data is synced
+//:     automatically.
 //: * `OdinRoom.peers` \
 //:     This is a dictionary containing all peers in the room, indexed by their ID. Each peer has its own `userData`
 //:     property, which is also observable and stores a byte array with arbitrary data assigned by the user.
@@ -115,6 +118,11 @@ room.delegate = delegate
 // Monitor the room connection status
 room.$connectionStatus.sink {
     print("New Connection Status: \($0.state.rawValue)")
+}
+
+// Monitor the room user data
+room.$userData.sink {
+    print("New User Data: \($0)")
 }
 
 // Monitor the list of peers in the room
