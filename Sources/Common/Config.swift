@@ -65,3 +65,65 @@ enum OdinAudioConfig {
         )!
     }
 }
+
+/**
+ * Allow APM configs being encodable and decodable for compatibility with external representations such as JSON.
+ */
+extension OdinApmConfig: Codable {
+    /**
+     * An authoritative list of properties that must be included when APM configs are encoded or decoded.
+     */
+    enum CodingKeys: String, CodingKey {
+        case voice_activity_detection
+        case voice_activity_detection_attack_probability
+        case voice_activity_detection_release_probability
+        case volume_gate
+        case volume_gate_attack_loudness
+        case volume_gate_release_loudness
+        case echo_canceller
+        case high_pass_filter
+        case pre_amplifier
+        case noise_suppression_level
+        case transient_suppressor
+    }
+
+    /**
+     * Encodes the APM config into the given encoder.
+     */
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(self.voice_activity_detection, forKey: .voice_activity_detection)
+        try container.encode(self.voice_activity_detection_attack_probability, forKey: .voice_activity_detection_attack_probability)
+        try container.encode(self.voice_activity_detection_release_probability, forKey: .voice_activity_detection_release_probability)
+        try container.encode(self.volume_gate, forKey: .volume_gate)
+        try container.encode(self.volume_gate_attack_loudness, forKey: .volume_gate_attack_loudness)
+        try container.encode(self.volume_gate_release_loudness, forKey: .volume_gate_release_loudness)
+        try container.encode(self.echo_canceller, forKey: .echo_canceller)
+        try container.encode(self.high_pass_filter, forKey: .high_pass_filter)
+        try container.encode(self.pre_amplifier, forKey: .pre_amplifier)
+        try container.encode(self.noise_suppression_level.rawValue, forKey: .noise_suppression_level)
+        try container.encode(self.transient_suppressor, forKey: .transient_suppressor)
+    }
+
+    /**
+     * Creates a new APM config by decoding from the given decoder.
+     */
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.init(
+            voice_activity_detection: try values.decode(Bool.self, forKey: .voice_activity_detection),
+            voice_activity_detection_attack_probability: try values.decode(Float.self, forKey: .voice_activity_detection_attack_probability),
+            voice_activity_detection_release_probability: try values.decode(Float.self, forKey: .voice_activity_detection_release_probability),
+            volume_gate: try values.decode(Bool.self, forKey: .volume_gate),
+            volume_gate_attack_loudness: try values.decode(Float.self, forKey: .volume_gate_attack_loudness),
+            volume_gate_release_loudness: try values.decode(Float.self, forKey: .volume_gate_release_loudness),
+            echo_canceller: try values.decode(Bool.self, forKey: .echo_canceller),
+            high_pass_filter: try values.decode(Bool.self, forKey: .high_pass_filter),
+            pre_amplifier: try values.decode(Bool.self, forKey: .pre_amplifier),
+            noise_suppression_level: OdinNoiseSuppressionLevel(rawValue: try values.decode(UInt32.self, forKey: .noise_suppression_level)),
+            transient_suppressor: try values.decode(Bool.self, forKey: .transient_suppressor)
+        )
+    }
+}
