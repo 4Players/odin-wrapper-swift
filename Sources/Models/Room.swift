@@ -71,7 +71,8 @@ public class OdinRoom: Hashable, ObservableObject {
         high_pass_filter: false,
         pre_amplifier: false,
         noise_suppression_level: OdinNoiseSuppressionLevel_Moderate,
-        transient_suppressor: false
+        transient_suppressor: false,
+        gain_controller: false
     )
 
     /**

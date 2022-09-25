@@ -85,6 +85,7 @@ extension OdinApmConfig: Codable {
         case pre_amplifier
         case noise_suppression_level
         case transient_suppressor
+        case gain_controller
     }
 
     /**
@@ -104,6 +105,7 @@ extension OdinApmConfig: Codable {
         try container.encode(self.pre_amplifier, forKey: .pre_amplifier)
         try container.encode(self.noise_suppression_level.rawValue, forKey: .noise_suppression_level)
         try container.encode(self.transient_suppressor, forKey: .transient_suppressor)
+        try container.encode(self.gain_controller, forKey: .gain_controller)
     }
 
     /**
@@ -123,7 +125,8 @@ extension OdinApmConfig: Codable {
             high_pass_filter: try values.decode(Bool.self, forKey: .high_pass_filter),
             pre_amplifier: try values.decode(Bool.self, forKey: .pre_amplifier),
             noise_suppression_level: OdinNoiseSuppressionLevel(rawValue: try values.decode(UInt32.self, forKey: .noise_suppression_level)),
-            transient_suppressor: try values.decode(Bool.self, forKey: .transient_suppressor)
+            transient_suppressor: try values.decode(Bool.self, forKey: .transient_suppressor),
+            gain_controller: try values.decode(Bool.self, forKey: .gain_controller)
         )
     }
 }
