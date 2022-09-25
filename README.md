@@ -275,7 +275,8 @@ let audioConfig: OdinApmConfig = .init(
     high_pass_filter: true,
     pre_amplifier: true,
     noise_suppression_level: OdinNoiseSuppressionLevel_Moderate,
-    transient_suppressor: true
+    transient_suppressor: true,
+    gain_controller: true
 )
 
 // Update the APM settings of the room
@@ -311,6 +312,10 @@ When enabled, the preamplifier will boost the signal of sensitive microphones by
 #### Transient Suppression
 
 When enabled, the transient suppressor will try to detect and attenuate keyboard clicks.
+
+### Automatic Gain Control (AGC)
+
+When enabled, the gain controller will bring the input audio signal to an appropriate range when it's either too loud or too quiet.
 
 ### User Data
 
