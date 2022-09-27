@@ -26,4 +26,4 @@
 
 /// The current ODIN XCFramework version.
 /// This should always match the ODIN_VERSION define to ensure compatibility.
-let version = "1.1.0"
+let version = "1.1.1"
