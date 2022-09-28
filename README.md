@@ -313,7 +313,7 @@ When enabled, the preamplifier will boost the signal of sensitive microphones by
 
 When enabled, the transient suppressor will try to detect and attenuate keyboard clicks.
 
-### Automatic Gain Control (AGC)
+#### Automatic Gain Control (AGC)
 
 When enabled, the gain controller will bring the input audio signal to an appropriate range when it's either too loud or too quiet.
 
