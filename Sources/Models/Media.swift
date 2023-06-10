@@ -90,7 +90,7 @@ public class OdinMedia: Hashable, ObservableObject {
                 let buffer = UnsafeMutableBufferPointer<Float>(audioBufferList.pointee.mBuffers)
                 
                 do {
-                    try self.read(buffer: buffer, frameCount: frameCount, channelLayout: OdinChannelLayout_Mono)
+                    try self.read(buffer: buffer, frameCount: frameCount)
                 } catch {
                     return kAudioCodecIllegalOperationError
                 }
@@ -121,7 +121,7 @@ public class OdinMedia: Hashable, ObservableObject {
         
         self.streamHandle = 0
     }
-    
+
     /**
      * Sends data to the audio stream. The data has to be interleaved [-1, 1] float data.
      */
@@ -133,8 +133,8 @@ public class OdinMedia: Hashable, ObservableObject {
     /**
      * Reads audio data from the specified `OdinMediaStream`. This will return audio data in 48kHz interleaved.
      */
-    private func read(buffer: UnsafeMutableBufferPointer<Float>, frameCount: UInt32, channelLayout: OdinChannelLayout) throws {
-        let returnCode = odin_audio_read_data(self.streamHandle, buffer.baseAddress, Int(frameCount), channelLayout)
+    private func read(buffer: UnsafeMutableBufferPointer<Float>, frameCount: UInt32) throws {
+        let returnCode = odin_audio_read_data(self.streamHandle, buffer.baseAddress, Int(frameCount))
         try OdinResult.validate(returnCode)
     }
     

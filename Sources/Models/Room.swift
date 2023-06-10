@@ -136,10 +136,9 @@ public class OdinRoom: Hashable, ObservableObject {
             format: OdinAudioConfig.format(),
             renderBlock: { [unowned self] _, _, frameCount, audioBufferList -> OSStatus in
                 let buffer = UnsafeMutableBufferPointer<Float>(audioBufferList.pointee.mBuffers)
-                var samples = Int(frameCount)
 
                 do {
-                    try self.mixMedias(buffer: buffer, frameCount: &samples, channelLayout: OdinChannelLayout_Mono)
+                    try self.mixMedias(buffer: buffer, frameCount: frameCount)
                 } catch {
                     return kAudioCodecIllegalOperationError
                 }
@@ -412,12 +411,12 @@ public class OdinRoom: Hashable, ObservableObject {
      *
      * Note: If enabled this will also apply any audio processing to the output stream and feed back required data.
      */
-    private func mixMedias(buffer: UnsafeMutableBufferPointer<Float>, frameCount: UnsafeMutablePointer<Int>, channelLayout: OdinChannelLayout) throws {
+    private func mixMedias(buffer: UnsafeMutableBufferPointer<Float>, frameCount: UInt32) throws {
         let medias = self.remoteMedias.filter { media in
             media.value.audioNode.engine == nil
         }
 
-        let returnCode = odin_audio_mix_streams(self.roomHandle, Array(medias.keys), self.remoteMedias.count, buffer.baseAddress, frameCount, channelLayout)
+        let returnCode = odin_audio_mix_streams(self.roomHandle, Array(medias.keys), self.remoteMedias.count, buffer.baseAddress, Int(frameCount))
         try OdinResult.validate(returnCode)
     }
 
