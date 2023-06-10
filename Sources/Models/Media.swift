@@ -180,6 +180,20 @@ public class OdinMedia: Hashable, ObservableObject {
     }
     
     /**
+     * Statistics for the media stream handle.
+     *
+     * Note: This is only available for output streams.
+     */
+    public var streamStats: OdinAudioStreamStats {
+        let count = 1
+        let stats = UnsafeMutablePointer<OdinAudioStreamStats>.allocate(capacity: count)
+        stats.initialize(repeating: OdinAudioStreamStats(), count: count)
+
+        let returnCode = odin_audio_stats(self.streamHandle, stats)
+        return odin_is_error(returnCode) ? OdinAudioStreamStats() : stats.pointee
+    }
+    
+    /**
      * Indicates whether or not this media is owned by a remote peer.
      */
     public var remote: Bool {
