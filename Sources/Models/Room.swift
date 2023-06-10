@@ -186,9 +186,6 @@ public class OdinRoom: Hashable, ObservableObject {
      * token obtained externally that authorizes the client to establish the connection.
      */
     public func join(token: OdinToken) throws -> UInt64 {
-        self.id = (try? token.roomId) ?? ""
-        self.ownPeer.userId = (try? token.userId) ?? ""
-
         let returnCode = odin_room_join(self.roomHandle, self.gateway, token.rawValue)
         try OdinResult.validate(returnCode)
 
@@ -421,6 +418,18 @@ public class OdinRoom: Hashable, ObservableObject {
     }
 
     /**
+     * Statistics for the underlying connection of the room.
+     */
+    public var connectionStats: OdinConnectionStats {
+        let count = 1
+        let stats = UnsafeMutablePointer<OdinConnectionStats>.allocate(capacity: count)
+        stats.initialize(repeating: OdinConnectionStats(), count: count)
+
+        let returnCode = odin_room_connection_stats(self.roomHandle, stats)
+        return odin_is_error(returnCode) ? OdinConnectionStats() : stats.pointee
+    }
+
+    /**
      * An array of current remote peers in the room.
      */
     public var remotePeers: [UInt64: OdinPeer] {
@@ -580,6 +589,7 @@ extension OdinRoom {
                 self.customer = ""
                 self.userData = []
                 self.ownPeer.id = 0
+                self.ownPeer.userId = ""
             }
 
             if self.delegate != nil {
@@ -612,6 +622,7 @@ extension OdinRoom {
     private func handleJoinedEvent(data: OdinEvent_JoinedData) {
         let roomId = String(cString: data.room_id)
         let customer = String(cString: data.customer)
+        let ownPeerUserId = String(cString: data.own_user_id)
         let roomUserData = [UInt8](UnsafeBufferPointer(
             start: data.room_user_data,
             count: data.room_user_data_len
@@ -621,6 +632,7 @@ extension OdinRoom {
             self.id = roomId
             self.customer = customer
             self.userData = roomUserData
+            self.ownPeer.userId = ownPeerUserId
             self.ownPeer.id = data.own_peer_id
 
             self.peers.updateValue(self.ownPeer, forKey: data.own_peer_id)
