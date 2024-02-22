@@ -333,7 +333,7 @@ let yourString = "Hello World!"
 let stringData = OdinCustomData.encode(yourString)
 
 // Set the user data
-try room.updateUserData(userData: stringData, target: OdinUserDataTarget_Peer)
+try room.updatePeerUserData(userData: stringData)
 ```
 
 #### b) Using a Custom Type
@@ -353,7 +353,7 @@ let yourCodable = YourCustomData(name: "John Doe")
 let codableData = OdinCustomData.encode(yourCodable)
 
 // Set the user data
-try room.updateUserData(userData: codableData, target: OdinUserDataTarget_Peer)
+try room.updatePeerUserData(userData: codableData)
 ```
 
 ### Messages
@@ -395,7 +395,7 @@ Join our official Discord server to chat with us directly and become a part of t
 
 ### Twitter
 
-Have a quick question? Tweet us at [@4PlayersBiz](https://twitter.com/4PlayersBiz) and we’ll help you resolve any issues.
+Have a quick question? Tweet us at [@ODIN4Players](https://twitter.com/ODIN4Players) and we’ll help you resolve any issues.
 
 ### Email
 
