@@ -203,7 +203,7 @@ public class OdinRoom: Hashable, ObservableObject {
 
         self.roomHandle = odin_room_create()
 
-        try self.registerEventHandler()
+        try self.unregisterEventHandler()
         try self.updateAudioConfig(self.audioConfig)
     }
 
