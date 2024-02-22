@@ -23,7 +23,7 @@ import OdinKit
 //: gateway URL, which will make the ODIN client use the default gateway running at `https://gateway.odin.4players.io`.
 
 // Create a new room instance
-let room = OdinRoom(gateway: "https://gateway.odin.4players.io")
+let room = try OdinRoom(gateway: "https://gateway.odin.4players.io")
 
 //: ## Handing Events
 //:
@@ -198,7 +198,7 @@ let yourString = "Hello World!"
 let stringData = OdinCustomData.encode(yourString)
 
 // Set the user data
-try room.updateUserData(userData: stringData, target: OdinUserDataTarget_Peer)
+try room.updatePeerUserData(userData: stringData)
 
 //: ### 2) Using a Custom Type
 //:
@@ -217,7 +217,7 @@ let yourCodable = YourCustomData(name: "John Doe")
 let codableData = OdinCustomData.encode(yourCodable)
 
 // Set the user data
-try room.updateUserData(userData: codableData, target: OdinUserDataTarget_Peer)
+try room.updatePeerUserData(userData: codableData)
 
 //: ## Sending Messages
 //:
