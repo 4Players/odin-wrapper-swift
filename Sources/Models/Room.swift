@@ -244,47 +244,22 @@ public class OdinRoom: Hashable, ObservableObject {
     }
 
     /**
-     * Updates the custom user data for either your own peer or the specified room itself. This data is synced between
-     * clients automatically, which allows storing of arbitrary information for each individual peer and even globally
-     * for the room if needed.
-     *
-     * Note: Use this with target peer before calling `OdinRoom.join` to set initial peer user data upon connect.
-     */
-    public func updateUserData(userData: [UInt8], target: OdinUserDataTarget) throws {
-        let returnCode = odin_room_update_user_data(self.roomHandle, target, userData, userData.count)
-        try OdinResult.validate(returnCode)
-
-        if target == OdinUserDataTarget_Peer {
-            self.ownPeer.userData = userData
-
-            if self.connectionStatus.state != OdinRoomConnectionState_Disconnected {
-                self.delegate?.onPeerUserDataChanged(room: self, peer: self.ownPeer)
-            }
-
-            self.objectWillChange.send()
-        } else {
-            self.userData = userData
-
-            if self.connectionStatus.state != OdinRoomConnectionState_Disconnected {
-                self.delegate?.onRoomUserDataChanged(room: self)
-            }
-        }
-    }
-
-    /**
-     * Updates the custom user data for your own peer. This data is synced between clients automatically.
+     * Updates the custom user data for your own peer. All user data is synced automatically, which allows storing of arbitrary
+     * information for each individual peer.
      *
      * Note: Use this before calling `OdinRoom.join` to set initial peer user data upon connect.
      */
     public func updatePeerUserData(userData: [UInt8]) throws {
-        try self.updateUserData(userData: userData, target: OdinUserDataTarget_Peer)
-    }
+        let returnCode = odin_room_update_peer_user_data(self.roomHandle, userData, userData.count)
+        try OdinResult.validate(returnCode)
 
-    /**
-     * Updates the custom user data for the current room. This data is synced between clients automatically.
-     */
-    public func updateRoomUserData(userData: [UInt8]) throws {
-        try self.updateUserData(userData: userData, target: OdinUserDataTarget_Room)
+        self.ownPeer.userData = userData
+
+        if self.connectionStatus.state != OdinRoomConnectionState_Disconnected {
+            self.delegate?.onPeerUserDataChanged(room: self, peer: self.ownPeer)
+        }
+
+        self.objectWillChange.send()
     }
 
     /**
@@ -296,8 +271,8 @@ public class OdinRoom: Hashable, ObservableObject {
      *
      * Note: Use this before calling `OdinRoom.join` to set the initial peer position upon connect.
      */
-    public func updatePosition(x: Float, y: Float) throws {
-        let returnCode = odin_room_update_position(self.roomHandle, x, y)
+    public func updatePosition(x: Float, y: Float, z: Float) throws {
+        let returnCode = odin_room_update_position(self.roomHandle, x, y, z)
         try OdinResult.validate(returnCode)
     }
 
