@@ -1,4 +1,4 @@
-![OdinKit](https://www.4players.io/images/odin/banner.jpg)
+![OdinKit](https://docs.4players.io/img/odin/banner.jpg)
 
 [![Releases](https://img.shields.io/github/release/4Players/odin-wrapper-swift)](https://github.com/4Players/odin-wrapper-swift/releases)
 [![Platforms](https://img.shields.io/badge/platforms-macOS%20iOS-lightgrey)](#requirements)
@@ -8,7 +8,7 @@
 
 # OdinKit
 
-OdinKit is a Swift package providing an object-oriented wrapper for the [ODIN](https://github.com/4Players/odin-sdk) native client library, which enables developers to integrate real-time VoIP chat technology into multiplayer games and apps on macOS and iOS.
+OdinKit is a Swift package providing an object-oriented wrapper for the [ODIN](https://github.com/4Players/odin-sdk) native client library, which enables developers to integrate [ODIN Voice](https://docs.4players.io/voice/), our real-time VoIP chat technology into multiplayer games and apps on macOS and iOS.
 
 - [Requirements](#requirements)
   - [XCFramework](#xcframework)
@@ -81,7 +81,7 @@ OdinKit provides a set of classes to provide easy access to just everything you 
 
 #### OdinAccessKey
 
-An access key is the unique authentication key to be used to generate room tokens for accessing the ODIN server network. You should think of it as your individual username and password combination all wrapped up into a single non-comprehendible string of characters, and treat it with the same respect. For your own security, we strongly recommend that you **NEVER** put an access key in your client-side code. We've created a very basic Node.js server [here](https://developers.4players.io/odin/examples/token-server/), to showcase how to issue ODIN tokens to your client apps without exposing your access key.
+An access key is the unique authentication key to be used to generate room tokens for accessing the ODIN server network. You should think of it as your individual username and password combination all wrapped up into a single non-comprehendible string of characters, and treat it with the same respect. For your own security, we strongly recommend that you **NEVER** put an access key in your client-side code. We've created a very basic Node.js server [here](https://docs.4players.io/voice/token-server/), to showcase how to issue ODIN tokens to your client apps without exposing your access key.
 
 **Note:** Using the `OdinAccessKey` default initializer will always create a new access key.
 
@@ -110,7 +110,7 @@ let authToken = try accessKey.generateToken(roomId: "foo", userId: "bar")
 
 In ODIN, users who want to communicate with each other need to join the same room. Optionally, you can specify an alternative gateway URL when initializing an `OdinRoom` instance.
 
-You can choose between a managed cloud and a self-hosted solution. Let [4Players GmbH](https://www.4players.io) deal with the setup, administration and bandwidth costs or run our server software on your own infrastructure allowing you complete control and customization of your deployment environment. Unless you're hosting your own servers, you don't need to set a gateway URL, which will make the ODIN client use the default gateway running in the European Union.
+You can choose between a managed cloud and a self-hosted solution. Let [4Players GmbH](https://www.4players.io/company/about_us/) deal with the setup, administration and bandwidth costs or run our server software on your own infrastructure allowing you complete control and customization of your deployment environment. Unless you're hosting your own servers, you don't need to set a gateway URL, which will make the ODIN client use the default gateway running in the European Union.
 
 ```swift
 // Create a new room instance
@@ -374,10 +374,10 @@ try room.sendMessage(data: yourMessage)
 
 ## Resources
 
-- [Documentation](https://www.4players.io/developers/)
-- [Examples](https://www.4players.io/odin/examples/)
-- [Frequently Asked Questions](https://www.4players.io/odin/faq/)
-- [Pricing](https://www.4players.io/odin/pricing/)
+- [Documentation](https://docs.4players.io/voice/)
+- [Examples](https://docs.4players.io/voice/swift/samples/)
+- [Frequently Asked Questions](https://docs.4players.io/voice/faq/)
+- [Pricing](https://odin.4players.io/pricing/)
 
 ## License
 
@@ -391,7 +391,7 @@ Contact us through the listed methods below to receive answers to your questions
 
 Join our official Discord server to chat with us directly and become a part of the 4Players ODIN community.
 
-[![Join us on Discord](https://developers.4players.io/images/join_discord.png)](https://4np.de/discord)
+[![Join us on Discord](https://docs.4players.io/img/join_discord.png)](https://4np.de/discord)
 
 ### Twitter
 
